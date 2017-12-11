@@ -12,10 +12,16 @@ public class MyDemoLogginAspect {
 	
 	// let's start with an @Before advice
 	
-	@Before("execution(public void addAccount())")
+	//@Before("execution(public void updateAccount())") - doesn't work
+	//@Before("execution(public void addAccount())") - work all of addAccount method
+	//@Before("execution(public void com.ex.aop.dao.AccountDAO.addAccount())") -- only one match
+	//@Before("execution(public void add*())") - match all add* method
+	//@Before("execution(void add*())") - match void type & add * method
+	
+	@Before("execution(* add*())") 
 	public void beforeAddAccountAdvice() {
 		
-		System.out.println("\n=====>>> Executing @Before advice on addAccount()");
+		System.out.println("\n=====>>> Executing @Before advice on addAcount()");
 		
 	}
 	
