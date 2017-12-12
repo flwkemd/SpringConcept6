@@ -3,10 +3,12 @@ package com.ex.aop.aspect;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
+@Order(2)
 public class MyDemoLogginAspect {
 
 	//this is where we add all of our related advices for logging
@@ -24,31 +26,36 @@ public class MyDemoLogginAspect {
 	//@Before("execution(* add*(..))") // match any params
 	//@Before("execution(* com.ex.aop.dao.*.*(..))") // match package any class & method & params
 	
-	@Pointcut("execution(* com.ex.aop.dao.*.*(..))")
-	private void forDaoPackage() {}
-	
-	// create pointcut for getter methods
-	@Pointcut("execution(* com.ex.aop.dao.*.get*(..))")
-	private void getter() {}
-	
-	// create pointcut for setter methods
-	@Pointcut("execution(* com.ex.aop.dao.*.set*(..))")
-	private void setter() {}
-	
-	// create pointcut : include package ... exclude getter/setter
-	@Pointcut("forDaoPackage() && !(getter() || setter())")
-	private void forDaoPackageNoGetterSetter() {}
+//	@Pointcut("execution(* com.ex.aop.dao.*.*(..))")
+//	private void forDaoPackage() {}
+//	
+//	// create pointcut for getter methods
+//	@Pointcut("execution(* com.ex.aop.dao.*.get*(..))")
+//	private void getter() {}
+//	
+//	// create pointcut for setter methods
+//	@Pointcut("execution(* com.ex.aop.dao.*.set*(..))")
+//	private void setter() {}
+//	
+//	// create pointcut : include package ... exclude getter/setter
+//	@Pointcut("forDaoPackage() && !(getter() || setter())")
+//	private void forDaoPackageNoGetterSetter() {}
 	
 	//@Before("forDaoPackage()")
-	@Before("forDaoPackageNoGetterSetter()")
+	@Before("com.ex.aop.aspect.LuvAopExpressions.forDaoPackageNoGetterSetter()")
 	public void beforeAddAccountAdvice() {
-		System.out.println("\n=====>>> Executing @Before advice on method");
+		System.out.println("=====>>> Executing @Before advice on method");
 	}
 	
-	//@Before("forDaoPackage()")
-	@Before("forDaoPackageNoGetterSetter()")
-	public void performApiAnalytics() {
-		System.out.println("=====>>> Performing API analytics");
-	}
+//	//@Before("forDaoPackage()")
+//	@Before("forDaoPackageNoGetterSetter()")
+//	public void performApiAnalytics() {
+//		System.out.println("=====>>> Performing API analytics");
+//	}
+
+//	@Before("forDaoPackageNoGetterSetter()")
+//	public void logToCloudAsync() {
+//		System.out.println("=====>>> Logging to Cloud in async fashion");
+//	}
 	
 }
