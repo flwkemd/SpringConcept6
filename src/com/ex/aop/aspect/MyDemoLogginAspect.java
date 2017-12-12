@@ -1,10 +1,14 @@
 package com.ex.aop.aspect;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.ex.aop.Account;
 
 @Aspect
 @Component
@@ -43,8 +47,30 @@ public class MyDemoLogginAspect {
 	
 	//@Before("forDaoPackage()")
 	@Before("com.ex.aop.aspect.LuvAopExpressions.forDaoPackageNoGetterSetter()")
-	public void beforeAddAccountAdvice() {
+	public void beforeAddAccountAdvice(JoinPoint theJoinPoint) {
 		System.out.println("=====>>> Executing @Before advice on method");
+	
+		// display the method signature
+		MethodSignature methodSig = (MethodSignature)theJoinPoint.getSignature();
+		System.out.println("Method: "+methodSig);
+		
+		// display method arguments
+		
+		// get args
+		Object[] args = theJoinPoint.getArgs();
+		
+		// loop thru args
+		for (Object temp : args) {
+			System.out.println(temp);
+		
+			if(temp instanceof Account) {
+				// downcast and print Account specific stuff
+				Account theAccount = (Account)temp;
+				
+				System.out.println("account name: "+theAccount.getName());
+				System.out.println("account level: "+theAccount.getLevel());
+			}
+		}
 	}
 	
 //	//@Before("forDaoPackage()")
@@ -57,5 +83,6 @@ public class MyDemoLogginAspect {
 //	public void logToCloudAsync() {
 //		System.out.println("=====>>> Logging to Cloud in async fashion");
 //	}
+	
 	
 }
