@@ -1,6 +1,9 @@
 package com.ex.aop.aspect;
 
+import java.util.List;
+
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -14,6 +17,41 @@ import com.ex.aop.Account;
 @Component
 @Order(2)
 public class MyDemoLogginAspect {
+	
+	// add a new advice for @AfterReturning on the findAccounts method
+	
+	@AfterReturning(
+			pointcut="execution(* com.ex.aop.dao.AccountDAO.findAccount(..))",
+			returning="result")
+	public void afterReturningFindAccountsAdvice(
+			JoinPoint theJoinPoint, List<Account> result) {
+		
+		// print out which method we are advising on
+		String method = theJoinPoint.getSignature().toShortString();
+		System.out.println("\n======>>> Executing @AfterReturning on method: "+method);
+	
+		// print out the results of the method call
+		System.out.println("======>>> result is: "+result);
+	
+		// let's post-process the data ... let's modify it
+		// convert the account names to uppercase
+		convertAccountNamesToUpperCase(result);
+	}
+	
+	private void convertAccountNamesToUpperCase(List<Account> result) {
+		
+		// loop through accounts
+		for(Account temp : result) {
+			
+			// get uppercase version of name
+			String theUpperName = temp.getName().toUpperCase();
+			
+			// update the name on the account
+			temp.setName(theUpperName);
+		}
+		
+	}
+
 
 	//this is where we add all of our related advices for logging
 	
