@@ -2,6 +2,8 @@ package com.ex.aop.service;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,5 +19,14 @@ public class TrafficFortuneService {
 		}
 		// return a fortune
 		return "Expect heavy traffic this morning";
+	}
+	
+	public String getFortune(boolean tripWire) {
+	
+		if(tripWire) {
+			throw new RuntimeException("RuntimeExeception");
+		}
+		
+		return getFortune();
 	}
 }
