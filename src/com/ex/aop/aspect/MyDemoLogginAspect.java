@@ -1,6 +1,7 @@
 package com.ex.aop.aspect;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,13 +23,15 @@ import com.ex.aop.Account;
 @Order(2)
 public class MyDemoLogginAspect {
 	
+	private Logger myLogger = Logger.getLogger(getClass().getName());
+	
 	@Around("execution(* com.ex.aop.service.*.getFortune(..))")
 	public Object aroundGetFortune(
 			ProceedingJoinPoint theProceedingJoinPoint) throws Throwable {
 		
 		// print out method we are advising on
 			String method = theProceedingJoinPoint.getSignature().toShortString();
-			System.out.println("\n======>>> Executing @Around on method: "+method);
+			myLogger.info("\n======>>> Executing @Around on method: "+method);
 
 		// get begin timestamp
 		long begin = System.currentTimeMillis();
@@ -41,7 +44,7 @@ public class MyDemoLogginAspect {
 		
 		// compute duration and display it
 		long duration = end - begin;
-		System.out.println("\n=====> Duraion: "+duration/1000.0+" seconds");
+		myLogger.info("\n=====> Duraion: "+duration/1000.0+" seconds");
 		
 		return result;
 	}
@@ -51,7 +54,7 @@ public class MyDemoLogginAspect {
 
 		// print out which method we are advising on
 		String method = theJoinPoint.getSignature().toShortString();
-		System.out.println("\n======>>> Executing @After (finally) on method: "+method);
+		myLogger.info("\n======>>> Executing @After (finally) on method: "+method);
 		
 	}
 	
@@ -63,10 +66,10 @@ public class MyDemoLogginAspect {
 		
 		// print out which method we are advising on
 		String method = theJoinPoint.getSignature().toShortString();
-		System.out.println("\n======>>> Executing @AfterThrowing on method: "+method);
+		myLogger.info("\n======>>> Executing @AfterThrowing on method: "+method);
 		
 		// log the exception
-		System.out.println("======>>> The exception is: "+theExc);
+		myLogger.info("======>>> The exception is: "+theExc);
 	
 	}
 	
@@ -80,10 +83,10 @@ public class MyDemoLogginAspect {
 		
 		// print out which method we are advising on
 		String method = theJoinPoint.getSignature().toShortString();
-		System.out.println("\n======>>> Executing @AfterReturning on method: "+method);
+		myLogger.info("\n======>>> Executing @AfterReturning on method: "+method);
 	
 		// print out the results of the method call
-		System.out.println("======>>> result is: "+result);
+		myLogger.info("======>>> result is: "+result);
 	
 		// let's post-process the data ... let's modify it
 		// convert the account names to uppercase
@@ -138,11 +141,11 @@ public class MyDemoLogginAspect {
 	//@Before("forDaoPackage()")
 	@Before("com.ex.aop.aspect.LuvAopExpressions.forDaoPackageNoGetterSetter()")
 	public void beforeAddAccountAdvice(JoinPoint theJoinPoint) {
-		System.out.println("=====>>> Executing @Before advice on method");
+		myLogger.info("=====>>> Executing @Before advice on method");
 	
 		// display the method signature
 		MethodSignature methodSig = (MethodSignature)theJoinPoint.getSignature();
-		System.out.println("Method: "+methodSig);
+		myLogger.info("Method: "+methodSig);
 		
 		// display method arguments
 		
@@ -151,14 +154,14 @@ public class MyDemoLogginAspect {
 		
 		// loop thru args
 		for (Object temp : args) {
-			System.out.println(temp);
+			myLogger.info(temp.toString());
 		
 			if(temp instanceof Account) {
 				// downcast and print Account specific stuff
 				Account theAccount = (Account)temp;
 				
-				System.out.println("account name: "+theAccount.getName());
-				System.out.println("account level: "+theAccount.getLevel());
+				myLogger.info("account name: "+theAccount.getName());
+				myLogger.info("account level: "+theAccount.getLevel());
 			}
 		}
 	}
@@ -166,12 +169,12 @@ public class MyDemoLogginAspect {
 //	//@Before("forDaoPackage()")
 //	@Before("forDaoPackageNoGetterSetter()")
 //	public void performApiAnalytics() {
-//		System.out.println("=====>>> Performing API analytics");
+//		myLogger.info("=====>>> Performing API analytics");
 //	}
 
 //	@Before("forDaoPackageNoGetterSetter()")
 //	public void logToCloudAsync() {
-//		System.out.println("=====>>> Logging to Cloud in async fashion");
+//		myLogger.info("=====>>> Logging to Cloud in async fashion");
 //	}
 	
 	
