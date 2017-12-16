@@ -8,7 +8,7 @@ import com.ex.aop.dao.AccountDAO;
 import com.ex.aop.dao.MembershipDAO;
 import com.ex.aop.service.TrafficFortuneService;
 
-public class AroundDemoApp {
+public class AroundDemoApp { 
 
 	public static void main(String[] args) {
 		
